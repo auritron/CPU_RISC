@@ -12,7 +12,7 @@ CMP, JMP, BNE, BEQ, CALL and RET
 > '#' represents comments (ignored by the program)
 
 3. Define flags-
-> Zero flag(zero)
+> Zero flag(zero) - Set to 1 if RESULT of Operation equals 0, vice versa.
 > Negative flag(ngtve)
 > Carry flag(carry)
 > Overflow flag(ovflw)
