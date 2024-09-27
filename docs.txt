@@ -1,0 +1,14 @@
+1. Plan on what instructions to add. Instructions planned till now-
+LOAD, SEND, SWAP, ADD, SUB, MUL, DIV, NOT, AND, OR, XOR, SET
+Instructions considered-
+SHL(Shift left), SHL(Shift right), RTL(Rotate left), RTR(Rotate right), LOOP, CMP, JMP, BNE, BEQ, CALL and RET
+
+2. Define Syntax-
+> '>' repesents instruction being performed on a register (eg. NOT R1 > R2)
+> '/' represents bit location (eg. s1/r1/bit1)
+> '&' represents relating multiple units in an operation (eg. ADD R1 & R2 > R3)
+> '=' represents assigment (eg. SET R1/bit1 = 0 [sets bit1 in R1 as 0]) 
+> ',' represents range of bits (eg. SETA R1/bit1,bit2 = 1 [sets all bits from bit1 to bit2(inclusive) to 1, also SETA stands for SETALL])
+> '#' represents comments (ignored by the program)
+
+3. Define flags-
