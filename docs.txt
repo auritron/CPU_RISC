@@ -1,7 +1,7 @@
 1. Plan on what instructions to add. Instructions planned till now-
-LOAD, SEND, SWAP, ADD, SUB, MUL, DIV, NOT, AND, OR, XOR, SET
+LOAD, SEND, SWAP, ADD, SUB, MUL, DIV, NOT, AND, OR, XOR, SET, STL, STR, RTL, RTR
 Instructions considered-
-SHL(Shift left), SHL(Shift right), RTL(Rotate left), RTR(Rotate right), LOOP, CMP, JMP, BNE, BEQ, CALL and RET
+CMP, JMP, BNE, BEQ, CALL and RET
 
 2. Define Syntax-
 > '>' repesents instruction being performed on a register (eg. NOT R1 > R2)
@@ -12,3 +12,7 @@ SHL(Shift left), SHL(Shift right), RTL(Rotate left), RTR(Rotate right), LOOP, CM
 > '#' represents comments (ignored by the program)
 
 3. Define flags-
+> Zero flag(zero)
+> Negative flag(ngtve)
+> Carry flag(carry)
+> Overflow flag(ovflw)
