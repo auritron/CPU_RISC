@@ -18,8 +18,8 @@ CALL and RET
 3. Define flags-
 > Zero flag(Z) - Set to 1 if RESULT equals 0, set to 0 if RESULT does not equal 0.
 > Sign flag(S) - Set to 1 if RESULT is negative. set to 0 if RESULT is positive.
-> Carry flag(C) - Set to 1 if RESULT after addition has an extra carry unit, or RESULT requires a borrow unit is subtraction.
-> Overflow flag(O)
+> Carry flag(C) - Set to 1 if RESULT after addition has an extra carry unit, or RESULT requires a borrow unit is subtraction. ONLY for UNSIGNED arithmetic.
+> Overflow flag(O) - Set to 1 if RESULT after addition has an extra overflow unit, or RESULT requires a borrow unit is subtraction. ONLY for SIGNED arithmetic.
 
 4. Set and detect flags and labels depending on instructions-
 > CMP r1 & r2:-
@@ -35,3 +35,4 @@ Conditionals:-
 - NOT WGT @LABEL:- Goes to LABEL if f(Z) = 1 or f(S) = 1 [greater than or equal to]
 - WLT @LABEL:- Goes to LABEL if f(Z) = 0 and f(S) = 1 [less than]
 - NOT WLT @LABEL:- Goes to LABEL if f(Z) = 1 or f(S) = 0 [less than or equal to]
+- WCY @LABEL:- Goes to LABEL if f(C) = 1 [carry flag is true] 

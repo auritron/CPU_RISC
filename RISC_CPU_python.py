@@ -1,6 +1,7 @@
 import json
 
-instructions = {1:"LOAD",   #LOAD from RAM to Cache
+class CPU:
+        instructions = {1:"LOAD",   #LOAD from RAM to Cache
                 2:"SEND",   #SEND from Cache to RAM
                 3:"SWAP",   #SWAP the data in two Registers
                 4:"ADD",    #ADD the values of two Registers
@@ -19,7 +20,7 @@ instructions = {1:"LOAD",   #LOAD from RAM to Cache
                 17:"RTR"    #ROTATE bist RIGHT
                 } 
 
-cache = {
+        cache = {
         1:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         2:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         3:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -30,9 +31,10 @@ cache = {
         8:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
         }
 
-flags = {
-        "zero":0,  #Zero Flag
-        "ngtve":0, #Negative flag
-        "carry":0, #Carry flag
-        "ovflw":0  #Overflow Flag
+        flags = {
+        "Z":0,  #Zero Flag
+        "S":0, #Negative flag
+        "C":0, #Carry flag
+        "O":0  #Overflow Flag
         }
+
