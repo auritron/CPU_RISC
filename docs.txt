@@ -13,25 +13,25 @@ CALL and RET
 > '#' represents comments (ignored by the program)
 > '%' represents immediate values (eg. %15 is converted to binary as 0000 0000 0000 1111 and then operated upon)
 > '@' represents a label which can be jumped back to by the program(eg. @LABEL_1). Needs to be followed be '[]' where the code shall be executed.
-> 'f(FLAG)' returns the value of the flag currently as either 0 or 1 depending upon how it is (FLAG = 'zero','ngtve','carry','ovflw')
+> 'f(FLAG)' returns the value of the flag currently as either 0 or 1 depending upon how it is (FLAG = 'Z','S','C','O')
 
-3. Define flags and labels-
-> Zero flag(zero) - Set to 1 if RESULT of Operation equals 0, vice versa.
-> Negative flag(ngtve)
-> Carry flag(carry)
-> Overflow flag(ovflw)
+3. Define flags-
+> Zero flag(Z) - Set to 1 if RESULT equals 0, set to 0 if RESULT does not equal 0.
+> Sign flag(S) - Set to 1 if RESULT is negative. set to 0 if RESULT is positive.
+> Carry flag(C) - Set to 1 if RESULT after addition has an extra carry unit, or RESULT requires a borrow unit is subtraction.
+> Overflow flag(O)
 
-4. Set flags depending on instructions-
+4. Set and detect flags and labels depending on instructions-
 > CMP r1 & r2:-
-- zero = 0, ngtve = 0 (r1 > r2)
-- zero = 1, ngtve = 0 (r1 = r2)
-- zero = 0, ngtve = 1 (r1 < r2)
-- RETURN error if zero and ngtve flag are both equal to 1.
+- Z = 0, S = 0 (r1 > r2)
+- Z = 1, S = 0 (r1 = r2)
+- Z = 0, S = 1 (r1 < r2)
+- RETURN error if Z and S flag are both equal to 1.
 > GOTO @LABEL:- Goes back to the level unconditionally
 Conditionals:-
-- WEQ @LABEL:- Goes to LABEL if f(zero) = 1 [equal to]
-- NOT WEQ @LABEL:- Goes to LABEL if f(zero) = 0 [not equal to]
-- WGT @LABEL:- Goes to LABEL if f(zero) = 0 and f(ngtve) = 0 [greater than]
-- NOT WGT @LABEL:- Goes to LABEL if f(zero) = 1 or f(ngtve) = 1 [greater than or equal to]
-- WLT @LABEL:- Goes to LABEL if f(zero) = 0 and f(ngtve) = 1 [less than]
-- NOT WLT @LABEL:- Goes to LABEL if f(zero) = 1 or f(ngtve) = 0 [less than or equal to]
+- WEQ @LABEL:- Goes to LABEL if f(Z) = 1 [equal to]
+- NOT WEQ @LABEL:- Goes to LABEL if f(Z) = 0 [not equal to]
+- WGT @LABEL:- Goes to LABEL if f(Z) = 0 and f(S) = 0 [greater than]
+- NOT WGT @LABEL:- Goes to LABEL if f(Z) = 1 or f(S) = 1 [greater than or equal to]
+- WLT @LABEL:- Goes to LABEL if f(Z) = 0 and f(S) = 1 [less than]
+- NOT WLT @LABEL:- Goes to LABEL if f(Z) = 1 or f(S) = 0 [less than or equal to]
