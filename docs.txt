@@ -1,7 +1,7 @@
 1. Plan on what instructions to add. Instructions planned till now-
 LOAD, SEND, COPY, ADD, SUB, MUL, DIV, NOT, AND, OR, XOR, SET, STL, STR, RTL, RTR, CMP, GOTO, WEQ, WGT, WLT
 Instructions considered-
-CALL and RET
+CALL,  RET
 
 2. Define Syntax-
 > '>' repesents instruction being performed on a register (eg. NOT R1 > R2)
@@ -36,3 +36,12 @@ Conditionals:-
 - WLT @LABEL:- Goes to LABEL if f(Z) = 0 and f(S) = 1 [less than]
 - NOT WLT @LABEL:- Goes to LABEL if f(Z) = 1 or f(S) = 0 [less than or equal to]
 - WCY @LABEL:- Goes to LABEL if f(C) = 1 [carry flag is true] 
+
+5. Tokenizer- 
+Tokenize the input cmds by the user. Create a 2D array, containing the list of tokens for each input. If there is a new line in the input, create a new list.
+Then, tokenize that input. For all identifiers in a single line, an inner list will tokenize them. If the instruction 'RUN' is detected, the tokenization process stops.
+After that, interpretation and error handling begins.
+
+6. Interpretation and Error handling-
+- Check first token
+- Correspond to correct Syntax
