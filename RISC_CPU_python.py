@@ -1,7 +1,9 @@
 import json
 
 class CPU:
-        instructions = {1:"LOAD",   #LOAD from RAM to Cache
+
+        instructions = {
+                1:"LOAD",   #LOAD from RAM to Cache
                 2:"SEND",   #SEND from Cache to RAM
                 3:"SWAP",   #SWAP the data in two Registers
                 4:"ADD",    #ADD the values of two Registers
@@ -17,24 +19,32 @@ class CPU:
                 14:"STL",   #SHIFT bits LEFT
                 15:"STR",   #SHIFT bits RIGHT
                 16:"RTL",   #ROTATE bits LEFT
-                17:"RTR"    #ROTATE bist RIGHT
+                17:"RTR",   #ROTATE bist RIGHT
+                18:"CMP",   #COMPARE two registers
+                19:"GOTO",  #GO TO LABEL unconditionally
+                20:"WEQ",   #GO TO LABEL if f(Z) = 1
+                21:"WGT",   #GO TO LABEl if f(Z) = 0 and f(S) = 0
+                22:"WLT"
                 } 
 
-        cache = {
-        1:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        2:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        3:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        4:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        5:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        6:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        7:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        8:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-        }
+class Memory:
 
-        flags = {
-        "Z":0,  #Zero Flag
-        "S":0, #Negative flag
-        "C":0, #Carry flag
-        "O":0  #Overflow Flag
-        }
+        def __init__(self) -> None:
 
+                self.cache = {
+                        1:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        2:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        3:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        4:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        5:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        6:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        7:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        8:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                }
+
+                self.flags = {
+                        "Z":0, #Zero Flag
+                        "S":0, #Negative flag
+                        "C":0, #Carry flag
+                        "O":0  #Overflow Flag
+                }
