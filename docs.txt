@@ -1,5 +1,5 @@
 1. Plan on what instructions to add. Instructions planned till now-
-LOAD, SEND, SWAP, ADD, SUB, MUL, DIV, NOT, AND, OR, XOR, SET, STL, STR, RTL, RTR
+LOAD, SEND, COPY, ADD, SUB, MUL, DIV, NOT, AND, OR, XOR, SET, STL, STR, RTL, RTR
 Instructions considered-
 CMP, JMP, BNE, BEQ, CALL and RET
 
@@ -10,9 +10,21 @@ CMP, JMP, BNE, BEQ, CALL and RET
 > '=' represents assigment (eg. SET R1/bit1 = 0 [sets bit1 in R1 as 0]) 
 > ',' represents range of bits (eg. SETA R1/bit1,bit2 = 1 [sets all bits from bit1 to bit2(inclusive) to 1, also SETA stands for SETALL])
 > '#' represents comments (ignored by the program)
+> '%' represents immediate values (eg. %15 is converted to binary as 0000 0000 0000 1111 and then operated upon)
+> '@' represents a label which can be jumped back to by the program(eg. @LABEL_1). Needs to be followed be '[]' where the code shall be executed.
+> 'f(FLAG)' returns the value of the flag currently as either 0 or 1 depending upon how it is (FLAG = 'zero','ngtve','carry','ovflw')
 
-3. Define flags-
+3. Define flags and labels-
 > Zero flag(zero) - Set to 1 if RESULT of Operation equals 0, vice versa.
 > Negative flag(ngtve)
 > Carry flag(carry)
 > Overflow flag(ovflw)
+
+4. Set flags depending on instructions-
+> CMP r1 & r2:-
+- zero = 0, ngtve = 0 (r1 > r2)
+- zero = 1, ngtve = 0 (r1 = r2)
+- zero = 0, ngtve = 1 (r1 < r2)
+- RETURN error if zero and ngtve flag are both equal to 1.
+> GOTO @LABEL:- Goes back to the level unconditionally
+> WEQ @LABEL:- Goes to label if zero 
