@@ -1,13 +1,14 @@
 1. Plan on what instructions to add. Instructions planned till now-
-LOAD, SEND, COPY, ADD, SUB, MUL, DIV, NOT, AND, OR, XOR, SET, STL, STR, RTL, RTR
+LOAD, SEND, COPY, ADD, SUB, MUL, DIV, NOT, AND, OR, XOR, SET, STL, STR, RTL, RTR, CMP, GOTO, WEQ, WGT, WLT
 Instructions considered-
-CMP, JMP, BNE, BEQ, CALL and RET
+CALL and RET
 
 2. Define Syntax-
 > '>' repesents instruction being performed on a register (eg. NOT R1 > R2)
 > '/' represents bit location (eg. s1/r1/bit1)
 > '&' represents relating multiple units in an operation (eg. ADD R1 & R2 > R3)
 > '=' represents assigment (eg. SET R1/bit1 = 0 [sets bit1 in R1 as 0]) 
+> '()' represebts grouping and identifier precidence (eg. (R1 AND R2) OR R3 > R4)
 > ',' represents range of bits (eg. SETA R1/bit1,bit2 = 1 [sets all bits from bit1 to bit2(inclusive) to 1, also SETA stands for SETALL])
 > '#' represents comments (ignored by the program)
 > '%' represents immediate values (eg. %15 is converted to binary as 0000 0000 0000 1111 and then operated upon)
@@ -27,4 +28,10 @@ CMP, JMP, BNE, BEQ, CALL and RET
 - zero = 0, ngtve = 1 (r1 < r2)
 - RETURN error if zero and ngtve flag are both equal to 1.
 > GOTO @LABEL:- Goes back to the level unconditionally
-> WEQ @LABEL:- Goes to label if zero 
+Conditionals:-
+- WEQ @LABEL:- Goes to LABEL if f(zero) = 1 [equal to]
+- NOT WEQ @LABEL:- Goes to LABEL if f(zero) = 0 [not equal to]
+- WGT @LABEL:- Goes to LABEL if f(zero) = 0 and f(ngtve) = 0 [greater than]
+- NOT WGT @LABEL:- Goes to LABEL if f(zero) = 1 or f(ngtve) = 1 [greater than or equal to]
+- WLT @LABEL:- Goes to LABEL if f(zero) = 0 and f(ngtve) = 1 [less than]
+- NOT WLT @LABEL:- Goes to LABEL if f(zero) = 1 or f(ngtve) = 0 [less than or equal to]
