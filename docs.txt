@@ -37,11 +37,22 @@ Conditionals:-
 - NOT WLT @LABEL:- Goes to LABEL if f(Z) = 1 or f(S) = 0 [less than or equal to]
 - WCY @LABEL:- Goes to LABEL if f(C) = 1 [carry flag is true] 
 
-5. Tokenizer- 
+5. Classes-
+1. CPU Class - Contains all instructions, and the definitions of all the instructions.
+2. Memory Class - Contains cache and memory management.
+3. Interpreter Class - Contains Tokenizer and Error Handling.
+
+6. Tokenizer- 
 Tokenize the input cmds by the user. Create a 2D array, containing the list of tokens for each input. If there is a new line in the input, create a new list.
 Then, tokenize that input. For all identifiers in a single line, an inner list will tokenize them. If the instruction 'RUN' is detected, the tokenization process stops.
 After that, interpretation and error handling begins.
 
-6. Interpretation and Error handling-
+7. Interpretation and Error handling-
 - Check first token
 - Correspond to correct Syntax
+- Use subsequent tokens to find if syntax is correct
+- Relate to correct function
+- Substitute literal values from command into function
+- Check for next line and repeat
+- If there is an error encountered, discard the commands in that input and print exception. Reset input, and accept another one.
+- If fatal error, terminate program entirely.
