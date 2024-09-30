@@ -77,7 +77,7 @@ Instructions -
 > Add LSB in memory address 1 as MSB in temp array
 > Copy temp array to memory address 2
 
-4. ADD - (ADD R1 & R2 > R3 ; Add R1 and R2 into R3)
+14. ADD - (ADD R1 & R2 > R3 ; Add R1 and R2 into R3)
 > Locate memory address 1 and 2
 > If value is immediate value, convert to binary
 > Use arithmetic rules to find binary sum (0+0 = 0, 1+0 = 1, 0+1 = 1, 1+1 = 10)
@@ -85,7 +85,7 @@ Instructions -
 > Store sum in temp array
 > Copy temp array into memory address 3
 
-5. SUB - (SUB R1 & R2 > R3 ; Subtract R2 from R1 into R3)
+15. SUB - (SUB R1 & R2 > R3 ; Subtract R2 from R1 into R3)
 > Locate memory address 1 and 2
 > If value is immediate value, convert to binary
 > Use arithmetic rules to find binary difference (0-0 = 0, 1-0 = 1, 1-1 = 0, 0-1 = 1 with 1 borrow)
@@ -93,4 +93,13 @@ Instructions -
 > Store difference in temp array
 > Copy temp array into memory address 3
 
-6. MUL - (MUL R1 & R2 > R3 ; Multiply R1 and R2 into R3)
+16. MUL - (MUL R1 & R2 > R3 ; Multiply R1 and R2 into R3)
+> Locate memory address 1 and 2
+> If value is immediate value, convert to binary
+> Use 2D temp array. Go to first element of the array of memory address 2.
+> Multiply that element with every element in memory 1, and put resultant bits in list 1 of the 2D array.
+> Use arithmetic rules to find the binary partial product (0 x 0 = 0 , 0 x 1 = 0 , 1 x 0 = 0 , 1 x 1 = 1)
+> Repeat this process for other digits in memory address 2, and for each corresponding digit, send each new partial product into corresponding list in the 2D array.
+> Shift each corresponding sum by n digits depending, where n is the digit being multiplied from the second array.
+> Using ADD, add all the elements in the list one by one.
+> Copy the resulting sum into memory address 3
