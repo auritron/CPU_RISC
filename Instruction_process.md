@@ -53,6 +53,30 @@ Instructions -
 > Result is in temp array
 > Copy temp array to memory address 3
 
+10. STL - (STL R1 & %(n); Shifts all bits in R1 leftwards, by immediate value n bits)
+> Locate memory address 1
+> Load all bits except MSB into temp array, and reduce indices by n
+> Add all n missing bits as 0 in temp array
+> Copy temp array to memory address 2
+
+11. STR - (STR R1 & %(n); Shifts all bits in R1 leftwards, by immediate value n bits)
+> Locate memory address 1
+> Load all bits except LSB into temp array, and increase indices by n
+> Add all n missing bits as 0 in temp array
+> Copy temp array to memory address 2
+
+12. RTL - (RTL R1 & %(n); Rotates all bits in R1 leftwards, by immediate value n bits)
+> Locate memory address 1
+> Load all bits except MSB into temp array, and reduce indices by n
+> Add all bits from MSB to nth bit as MSB in temp array
+> Copy temp array to memory address 2
+
+13. RTR - (RTR R1 & %(n); Rotates all bits in R1 leftwards, by immediate value n bits)
+> Locate memory address 1
+> Load all bits except LSB into temp array, and increase indices by n
+> Add LSB in memory address 1 as MSB in temp array
+> Copy temp array to memory address 2
+
 4. ADD - (ADD R1 & R2 > R3 ; Add R1 and R2 into R3)
 > Locate memory address 1 and 2
 > If value is immediate value, convert to binary
