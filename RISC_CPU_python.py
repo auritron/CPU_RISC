@@ -32,6 +32,8 @@ class Instructions:
                         21:"WGT",   #GO TO LABEl if f(Z) = 0 and f(S) = 0
                         22:"WLT"
                 }                  
+class ALU:
+        pass
 
 class Memory:
 
@@ -54,3 +56,6 @@ class Memory:
                         "C":0, #Carry flag
                         "O":0  #Overflow Flag
                 }
+
+class Interpreter:
+        pass
