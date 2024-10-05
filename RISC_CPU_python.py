@@ -25,12 +25,16 @@ class Instructions:
                         14:"ADD",   #ADD the values of two Registers
                         15:"SUB",   #SUBTRACT the values of two Registers
                         16:"MUL",   #MULTIPLY the values of two Registers
-                        17:"DIV",   #DIVIDE the values of two Registers
-                        18:"CMP",   #COMPARE two registers
-                        19:"GOTO",  #GO TO LABEL unconditionally
-                        20:"WEQ",   #GO TO LABEL if f(Z) = 1
-                        21:"WGT",   #GO TO LABEl if f(Z) = 0 and f(S) = 0
-                        22:"WLT"
+                        17:"DIV",   #DIVIDE the values of two Registers and store quotient
+                        18:"MOD",   #DIVIDE the values of two registers and store remainder
+                        19:"CMP",   #COMPARE two registers
+                        20:"GOTO",  #GO TO LABEL unconditionally
+                        21:"WEQ",   #GO TO LABEL if f(Z) = 1
+                        22:"WGT",   #GO TO LABEl if f(Z) = 0 and f(S) = 0
+                        23:"WLT",   #GO TO LABEl if f(Z) = 0 and f(S) = 1
+                        24:"CAL",   #GO TO LABEL unconditionally, and set save point
+                        25:"RET"    #RETURN to save point set by CAL in the subroutine
+
                 }                  
 class ALU:
         pass

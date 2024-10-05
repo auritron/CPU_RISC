@@ -1,5 +1,5 @@
 Instructions -
-('-' represents a bullet point, '>' represents pseudocode)
+('>' represents pseudocode)
 
 1. LOAD - (LOAD R1 > R2 ; R1 is in RAM and R2 is in Cache)
 > Locate memory address from RAM(from function)
@@ -102,4 +102,30 @@ Instructions -
 > Repeat this process for other digits in memory address 2, and for each corresponding digit, send each new partial product into corresponding list in the 2D array.
 > Shift each corresponding sum by n digits depending, where n is the digit being multiplied from the second array.
 > Using ADD, add all the elements in the list one by one.
-> Copy the resulting sum into memory address 3
+> Copy the resulting sum into memory address 3 
+
+17. DIV - (DIV R1 & R2 > R3 ; Divide R1 by R2 and store quotient in R3)
+> Locate memory address 1 and 2
+> If value is immediate value, convert to binary
+> If dividend < divisor, set f(C) to 1 for unsigned division, and f(O) to 1 for signed division. Else, set to zero.
+> Take 1D array for quotient
+> Take the digits of the divisor from the first 1 to the LSB as 'divisor'
+> Take the corresponding number of digits in dividend from MSB to nth bit from left for dividend, and subtract it with divisor.
+>
+
+18. MOD - (MOD R1 & R2 > R3 ; Divide R1 by R2 and store remainder in R3)
+
+19. CMP - (CMP R1 & R2 ; Compare R1 and R2)
+- If R1 > R2, set f(Z) = 0 and f(S) = 0
+- If R1 = R2, set f(Z) = 1 and f(S) = 0
+- If R1 < R2, set f(Z) = 0 and f(S) = 1
+> Locate memory address 1 and 2
+> Set temp variable to zero
+> Compare each digit of address 1 with 2
+    > If (MSB of address 1 > MSB of address 2), end and set temp variable to 1
+    > If (MSB of address 1 < MSB of address 2), end and set temp variable to -1
+    > If (MSB of address 1 = MSB of address 2), shift to next bit, and repeat until above conditions are reached. If not, set temp variable to 0.
+> If temp variable = 0, set f(Z) to 0
+> If temp variable = -1, set f(S) to 1
+
+20.  GOTO - (GOTO @LABEL ; Goes to a label unconditionally)
