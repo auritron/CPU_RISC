@@ -107,11 +107,16 @@ Instructions -
 17. DIV - (DIV R1 & R2 > R3 ; Divide R1 by R2 and store quotient in R3)
 > Locate memory address 1 and 2
 > If value is immediate value, convert to binary
-> If dividend < divisor, set f(C) to 1 for unsigned division, and f(O) to 1 for signed division. Else, set to zero.
+> If divisor is 0, end execution for instruction immediately, and set f(DZ) to 1. Else, set f(DZ) to 0.
+> If dividend < divisor, set f(C) to 1 for unsigned division, and f(O) to 1 for signed division. Else, set f(C) and f(O) to zero. Exit early in that case.
 > Take 1D array for quotient
-> Take the digits of the divisor from the first 1 to the LSB as 'divisor'
-> Take the corresponding number of digits in dividend from MSB to nth bit from left for dividend, and subtract it with divisor.
->
+> Take the digits of the divisor from the first 1 to the LSB as 'divisor' var, where n is the length of divisor.
+> Take the corresponding number of digits in dividend from MSB to nth bit from left for dividend, and compare to divisor.
+    > If divisor is smaller or same size, subtract normally, using regular subtraction. Add 1 to quotient array, to the left.
+    > If divisor is larger, subtract 0. add 0 to quotient array, from the left.
+> Shift divisor to the right by taking the MSB+1 to nth bit + 1 bit, and perform subtraction on it too.
+> Repeat length of dividend - n times.
+> Copy quotient into memory address 3
 
 18. MOD - (MOD R1 & R2 > R3 ; Divide R1 by R2 and store remainder in R3)
 

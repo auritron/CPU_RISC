@@ -55,10 +55,11 @@ class Memory:
                 }
 
                 self.flags = {
-                        "Z":0, #Zero Flag
-                        "S":0, #Negative flag
-                        "C":0, #Carry flag
-                        "O":0  #Overflow Flag
+                        "Z":0,    #Zero Flag
+                        "S":0,    #Negative Flag
+                        "C":0,    #Carry Flag
+                        "O":0,    #Overflow Flag
+                        "DZ":0    #Zero Division Flag
                 }
 
 class Interpreter:
