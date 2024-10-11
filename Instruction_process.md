@@ -117,8 +117,22 @@ Instructions -
 > Shift divisor to the right by taking the MSB+1 to nth bit + 1 bit, and perform subtraction on it too.
 > Repeat length of dividend - n times.
 > Copy quotient into memory address 3
+> Re-eupdate flags. If dividend > divisor, set f(C) to 0 for unsigned division, and f(O) to 0 for signed division.
 
 18. MOD - (MOD R1 & R2 > R3 ; Divide R1 by R2 and store remainder in R3)
+> Locate memory address 1 and 2
+> If value is immediate value, convert to binary
+> If divisor is 0, end execution for instruction immediately, and set f(DZ) to 1. Else, set f(DZ) to 0.
+> If dividend < divisor, set f(C) to 1 for unsigned division, and f(O) to 1 for signed division. Else, set f(C) and f(O) to zero. Exit early in that case.
+> Take 1D array for quotient
+> Take the digits of the divisor from the first 1 to the LSB as 'divisor' var, where n is the length of divisor.
+> Take the corresponding number of digits in dividend from MSB to nth bit from left for dividend, and compare to divisor.
+    > If divisor is smaller or same size, subtract normally, using regular subtraction. Add 1 to quotient array, to the left.
+    > If divisor is larger, subtract 0. add 0 to quotient array, from the left.
+> Shift divisor to the right by taking the MSB+1 to nth bit + 1 bit, and perform subtraction on it too.
+> Repeat length of dividend - n times.
+> Copy remainder into memory address 3
+> Re-eupdate flags. If dividend > divisor, set f(C) to 0 for unsigned division, and f(O) to 0 for signed division.
 
 19. CMP - (CMP R1 & R2 ; Compare R1 and R2)
 - If R1 > R2, set f(Z) = 0 and f(S) = 0
@@ -133,4 +147,55 @@ Instructions -
 > If temp variable = 0, set f(Z) to 0
 > If temp variable = -1, set f(S) to 1
 
-20.  GOTO - (GOTO @LABEL ; Goes to a label unconditionally)
+20. GOTO - (GOTO @LABEL ; Goes to a label unconditionally)
+> Locate label in instruction stack using search
+> Start subroutine from there and execute instructions accordingly
+> Go to appropriate label in instruction stack and execute from there
+
+21. WEQ - (WEQ @LABEL ; Goes to label if f(Z) = 1 and f(G) = 0)
+> Check if f(Z) = 1 and f(S) = 0
+    > If f(Z) = 1 and f(S) = 0, check if label exists
+    > If f(Z) = 0 or f(S) = 1, exit instruction
+> If  label exists, then follow this -
+    > Start subroutine from there and execute instructions accordingly
+    > Go to appropriate label in instruction stack and execute from there
+
+22. WGT - (WGT @LABEL ; Goes to label if f(Z) = 0 and f(G) = 0)
+> Check if f(Z) = 0 and f(S) = 0
+    > If f(Z) = 0 and f(S) = 0, check if label exists
+    > If f(Z) = 1 or f(S) = 1, exit instruction
+> If  label exists, then follow this -
+    > Start subroutine from there and execute instructions accordingly
+    > Go to appropriate label in instruction stack and execute from there
+
+23. WLT - (WLT @LABEL ; Goes to label if f(Z) = 0 and f(G) = 1)
+> Check if f(Z) = 0 and f(S) = 1
+    > If f(Z) = 0 and f(S) = 1, check if label exists
+    > If f(Z) = 1 or f(S) = 0, exit instruction
+> If  label exists, then follow this -
+    > Start subroutine from there and execute instructions accordingly
+    > Go to appropriate label in instruction stack and execute from there
+
+24. WCY - (WCY @LABEL ; Goes to label if f(C) = 1)
+> Check if f(C) = 1
+    > If f(C) = 1, check if label exists
+    > If f(C) = 0, exit instruction
+> If  label exists, then follow this -
+    > Start subroutine from there and execute instructions accordingly
+    > Go to appropriate label in instruction stack and execute from there
+
+25. WOV - (WOV @LABEL ; Goes to label if f(O) = 1)
+> Check if f(O) = 1
+    > If f(O) = 1, check if label exists
+    > If f(O) = 0, exit instruction
+> If  label exists, then follow this -
+    > Start subroutine from there and execute instructions accordingly
+    > Go to appropriate label in instruction stack and execute from there
+
+26. WDZ - (WDZ @LABEL ; Goes to label if f(DZ) = 1)
+> Check if f(DZ) = 1
+    > If f(DZ) = 1, check if label exists
+    > If f(DZ) = 0, exit instruction
+> If  label exists, then follow this -
+    > Start subroutine from there and execute instructions accordingly
+    > Go to appropriate label in instruction stack and execute from there

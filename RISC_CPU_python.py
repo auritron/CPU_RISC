@@ -1,7 +1,19 @@
 import json
 
+class System:
+
 class CPU:
-        pass
+
+        def __init__(self) -> None:
+                
+                self.interpreter = Interpreter()
+
+        def run(self):
+
+                while True:
+                        self.interpreter.tokenizer()
+                        self.interpreter.error_handler()
+                
 
 class Instructions:
 
@@ -30,10 +42,14 @@ class Instructions:
                         19:"CMP",   #COMPARE two registers
                         20:"GOTO",  #GO TO LABEL unconditionally
                         21:"WEQ",   #GO TO LABEL if f(Z) = 1
-                        22:"WGT",   #GO TO LABEl if f(Z) = 0 and f(S) = 0
-                        23:"WLT",   #GO TO LABEl if f(Z) = 0 and f(S) = 1
-                        24:"CAL",   #GO TO LABEL unconditionally, and set save point
-                        25:"RET"    #RETURN to save point set by CAL in the subroutine
+                        22:"WGT",   #GO TO LABEL if f(Z) = 0 and f(S) = 0
+                        23:"WLT",   #GO TO LABEL if f(Z) = 0 and f(S) = 1
+                        24:"WCY",   #GO TO LABEL if f(C) = 1
+                        25:"WOV",   #GO TO LABEL if f(O) = 1
+                        26:"WZD",   #GO TO LABEL if f(DZ) = 1
+                        27:"CAL",   #GO TO LABEL unconditionally, and set save point
+                        28:"RET",   #RETURN to save point set by CAL in the subroutine
+                        29:"END"    #TERMINATE program
 
                 }                  
 class ALU:
@@ -54,6 +70,8 @@ class Memory:
                         8:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                 }
 
+                self.temp_array = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
                 self.flags = {
                         "Z":0,    #Zero Flag
                         "S":0,    #Negative Flag
@@ -62,5 +80,45 @@ class Memory:
                         "DZ":0    #Zero Division Flag
                 }
 
-class Interpreter:
-        pass
+                self.call_stack = {}
+                self.ins_stack = {}
+
+class Interpreter:      #Interprets, tokenizes and error handles user input
+
+        def __init__(self) -> None:
+                
+                self.intp_memory = Memory()
+                self.intp_instructions = Instructions()
+                self.token_stack = []     #token stack
+
+        def tokenizer(self):
+
+                self.token_stack.clear()
+                cmd = input("> ")
+                tknstr = ""
+
+                for char in cmd:
+                        if char == " ":
+                                if tknstr:
+                                        self.token_stack.append(tknstr)
+                                        tknstr = ""
+                        else:
+                                tknstr += char
+
+                if tknstr:
+                        self.token_stack.append(tknstr)
+
+        def error_handler(self):
+                ins_key = 0
+                for i in self.token_stack:
+                        if i == 0:
+                                if self.token_stack[i] in self.intp_instructions.instructions.values():
+                                        
+                                        print("Hallelujah!")
+                                else:
+                                        print("haydeen moment")
+                                        break
+                        else:
+
+cpu = CPU()
+cpu.run()
