@@ -2,11 +2,21 @@ import json
 
 class System:
 
+        def __init__(self) -> None:
+                self.memory = Memory()
+                self.instructions = Instructions()
+                self.interpreter = Interpreter(self.memory, self.instructions)
+                self.cpu = CPU(self.interpreter)
+                
+        def run(self):
+                self.cpu.run()
+
+
 class CPU:
 
-        def __init__(self) -> None:
+        def __init__(self, interpreter) -> None:
                 
-                self.interpreter = Interpreter()
+                self.interpreter = interpreter
 
         def run(self):
 
@@ -80,19 +90,20 @@ class Memory:
                         "DZ":0    #Zero Division Flag
                 }
 
-                self.call_stack = {}
-                self.ins_stack = {}
+                self.call_stack = []
+                self.ins_stack = [[]]
 
 class Interpreter:      #Interprets, tokenizes and error handles user input
 
-        def __init__(self) -> None:
+        def __init__(self, memory, instructions) -> None:
                 
-                self.intp_memory = Memory()
-                self.intp_instructions = Instructions()
+                self.ins_stack_count = 1
+                self.memory = memory
+                self.instructions = instructions
                 self.token_stack = []     #token stack
 
-        def tokenizer(self):
-
+        def tokenizer(self):    #tokenize input into token stack
+                
                 self.token_stack.clear()
                 cmd = input("> ")
                 tknstr = ""
@@ -109,16 +120,41 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                         self.token_stack.append(tknstr)
 
         def error_handler(self):
-                ins_key = 0
-                for i in self.token_stack:
+
+                i = 0
+                new_ins = True
+                while i < len(self.token_stack):
                         if i == 0:
-                                if self.token_stack[i] in self.intp_instructions.instructions.values():
-                                        
+                                if self.token_stack[i] in self.instructions.instructions.values():
+                                        self.memory.ins_stack[len(self.memory.ins_stack)-1].append(find_key(self.instructions.instructions, self.token_stack[i]))
                                         print("Hallelujah!")
                                 else:
-                                        print("haydeen moment")
+                                        new_ins = False
+                                        print("bepis")
                                         break
-                        else:
 
-cpu = CPU()
-cpu.run()
+                        else:
+                                if self.chk_error(i):
+                                        print("lol")
+                                self.memory.ins_stack[len(self.memory.ins_stack)-1].append(self.token_stack[i])
+
+                        i += 1
+
+                if new_ins:
+                        self.memory.ins_stack.append([])
+
+                print(self.memory.ins_stack)        
+
+        def chk_error(self, index) -> bool:
+
+                ins_key = self.instructions.instructions[self.memory.ins_stack[len(self.ins_stack)-1][0]]
+                
+def find_key(dict, val): #find key value from dict
+
+        for key, value in dict.items():
+                if value == val:
+                        return key
+        return None
+
+system = System()
+system.run()
