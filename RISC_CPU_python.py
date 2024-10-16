@@ -164,22 +164,32 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                         return False
 
                 elif ins_key in {7,8,9,14,15,16,17,18}:         #type XXX R1 & R2 > R3
+                        
                         if len(ins_stk_ref) == 6:
-                                if tkn_type(ins_stk_ref[1]) == tkn_type(ins_stk_ref[3]) == tkn_type(ins_stk_ref[5]) == 1 and tkn_type(ins_stk_ref[2]) == 3 and tkn_type(ins_stk_ref[4]) == 2:
-                                        return True
-                                else:
-                                        return False
-                        else:
-                                return False
+                                if index in {1,3,5}:
+                                        if tkn_type(ins_stk_ref[index]) == 1:
+                                                return True
+                                elif index == 2:
+                                        if tkn_type(ins_stk_ref[index]) == 3:
+                                                return True
+                                elif index == 4:
+                                        if tkn_type(ins_stk_ref[index]) == 2:
+                                                return True
+                        return False
 
                 elif ins_key in {10,11,12,13}:                  #type XXX R1 & %(n)
+
                         if len(ins_stk_ref) == 4:
-                                if tkn_type(ins_stk_ref[1]) == 1 and tkn_type(ins_stk_ref[2]) == 3 and tkn_type(ins_stk_ref[3]) == 4:
-                                        return True
-                                else:
-                                        return False
-                        else:
-                                return False
+                                if index == 1:
+                                        if tkn_type(ins_stk_ref[index]) == 1:
+                                                return True
+                                elif index == 2:
+                                        if tkn_type(ins_stk_ref[index]) == 3:
+                                                return True
+                                elif index == 3:
+                                        if tkn_type(ins_stk_ref[index]) == 4:
+                                                return True
+                        return False
 
                 elif ins_key in {20,21,22,23,24,25,26,27,28}:   #type XXX @LABEL
                         return False
