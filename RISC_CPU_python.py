@@ -147,14 +147,39 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
 
         def chk_error(self, index) -> bool:
 
-                ins_key = self.instructions.instructions[self.memory.ins_stack[len(self.ins_stack)-1][0]]
+                ins_key = self.memory.ins_stack[-1][0]
+
+                if ins_key in [1,2,3,6]:                        #type XXX R1 > R2
+
+                elif ins_key in [7,8,9,14,15,16,17,18]:         #type XXX R1 & R2 > R3
+
+                elif ins_key in [10,11,12,13]:                  #type XXX R1 & %(n)
+
+                elif ins_key in [20,21,22,23,24,25,26,27,28]:   #type XXX @LABEL
                 
+                elif ins_key == 4:                              #type XXX R1/bit1
+
+                elif ins_key == 5:                              #type XXX R1/bit2
+
+                elif ins_key == 19:                             #type XXX R1 & R2
+
+                else:                                           #error
+                        return False
+
+                
+
+#other methods               
 def find_key(dict, val): #find key value from dict
 
         for key, value in dict.items():
                 if value == val:
                         return key
         return None
+
+def tkn_type(token) -> int: #assign value to token type - 1 for register, 2 for '>', 3 for '&', 4 for '%', 5 for '@', 0 for none
+        if len(token) == 8 and token[0:2] == '0x':
+                return 1
+        elif 
 
 system = System()
 system.run()
