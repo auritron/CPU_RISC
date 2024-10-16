@@ -135,7 +135,10 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
 
                         else:
                                 if self.chk_error(i):
-                                        print("lol")
+                                        print("yes", end=' ')
+                                else:
+                                        print("nom", end=' ')
+                                print()
                                 self.memory.ins_stack[len(self.memory.ins_stack)-1].append(self.token_stack[i])
 
                         i += 1
@@ -147,21 +150,48 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
 
         def chk_error(self, index) -> bool:
 
+                ins_stk_ref = self.memory.ins_stack
                 ins_key = self.memory.ins_stack[-1][0]
 
-                if ins_key in [1,2,3,6]:                        #type XXX R1 > R2
+                if ins_key in {1,2,3,6}:                        #type XXX R1 > R2
+                        if len(ins_stk_ref) == 4:
+                                if index in {1,3}:
+                                        if tkn_type(ins_stk_ref[index]) == 1:
+                                                return True
+                                elif index == 2:
+                                        if tkn_type(ins_stk_ref[index]) == 2:
+                                                return True
+                        return False
 
-                elif ins_key in [7,8,9,14,15,16,17,18]:         #type XXX R1 & R2 > R3
+                elif ins_key in {7,8,9,14,15,16,17,18}:         #type XXX R1 & R2 > R3
+                        if len(ins_stk_ref) == 6:
+                                if tkn_type(ins_stk_ref[1]) == tkn_type(ins_stk_ref[3]) == tkn_type(ins_stk_ref[5]) == 1 and tkn_type(ins_stk_ref[2]) == 3 and tkn_type(ins_stk_ref[4]) == 2:
+                                        return True
+                                else:
+                                        return False
+                        else:
+                                return False
 
-                elif ins_key in [10,11,12,13]:                  #type XXX R1 & %(n)
+                elif ins_key in {10,11,12,13}:                  #type XXX R1 & %(n)
+                        if len(ins_stk_ref) == 4:
+                                if tkn_type(ins_stk_ref[1]) == 1 and tkn_type(ins_stk_ref[2]) == 3 and tkn_type(ins_stk_ref[3]) == 4:
+                                        return True
+                                else:
+                                        return False
+                        else:
+                                return False
 
-                elif ins_key in [20,21,22,23,24,25,26,27,28]:   #type XXX @LABEL
+                elif ins_key in {20,21,22,23,24,25,26,27,28}:   #type XXX @LABEL
+                        return False
                 
                 elif ins_key == 4:                              #type XXX R1/bit1
+                        return False
 
                 elif ins_key == 5:                              #type XXX R1/bit2
+                        return False
 
                 elif ins_key == 19:                             #type XXX R1 & R2
+                        return False
 
                 else:                                           #error
                         return False
@@ -179,7 +209,16 @@ def find_key(dict, val): #find key value from dict
 def tkn_type(token) -> int: #assign value to token type - 1 for register, 2 for '>', 3 for '&', 4 for '%', 5 for '@', 0 for none
         if len(token) == 8 and token[0:2] == '0x':
                 return 1
-        elif 
+        elif token == '>':
+                return 2
+        elif token == '&':
+                return 3
+        elif token[0] == '%':
+                return 4
+        elif token[0] == '@':
+                return 5
+        else:
+                return 0
 
 system = System()
 system.run()
