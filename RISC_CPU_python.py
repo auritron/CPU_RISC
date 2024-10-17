@@ -105,8 +105,8 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
 
         def tokenizer(self):    #tokenize input into token stack
                 
-                self.token_stack.clear()
                 self.temp_ins.clear()
+                self.token_stack.clear()
                 cmd = input("> ")
                 tknstr = ""
 
@@ -148,13 +148,10 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
 
                         i += 1
 
-                #print(self.temp_ins)
-                print(self.memory.ins_stack)
-
                 if no_error:
-                        self.memory.ins_stack.append(self.temp_ins)
+                        self.memory.ins_stack.append(self.temp_ins[:])  #append copy of temp_ins to ins_stack
 
-                #print(self.memory.ins_stack)        
+                print(self.memory.ins_stack)        
 
         def chk_error(self, index) -> bool:     #return True if no error, return False if there is
 
