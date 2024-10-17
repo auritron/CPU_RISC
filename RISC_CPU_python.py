@@ -91,7 +91,7 @@ class Memory:
                 }
 
                 self.call_stack = []
-                self.ins_stack = [[]]
+                self.ins_stack = []
 
 class Interpreter:      #Interprets, tokenizes and error handles user input
 
@@ -101,10 +101,12 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                 self.memory = memory
                 self.instructions = instructions
                 self.token_stack = []     #token stack
+                self.temp_ins = []
 
         def tokenizer(self):    #tokenize input into token stack
                 
                 self.token_stack.clear()
+                self.temp_ins.clear()
                 cmd = input("> ")
                 tknstr = ""
 
@@ -122,72 +124,77 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
         def error_handler(self):
 
                 i = 0
-                new_ins = True
+                no_error = True
                 while i < len(self.token_stack):
                         if i == 0:
                                 if self.token_stack[i] in self.instructions.instructions.values():
-                                        self.memory.ins_stack[len(self.memory.ins_stack)-1].append(find_key(self.instructions.instructions, self.token_stack[i]))
+                                        
+                                        self.temp_ins.append(find_key(self.instructions.instructions, self.token_stack[i]))
+                                        #self.memory.ins_stack[len(self.memory.ins_stack)-1].append(find_key(self.instructions.instructions, self.token_stack[i]))
                                         print("Hallelujah!")
                                 else:
-                                        new_ins = False
                                         print("bepis")
                                         break
 
                         else:
+                                #self.memory.ins_stack[-1].append(self.token_stack[i])
                                 if self.chk_error(i):
-                                        print("yes", end=' ')
+                                        self.temp_ins.append(self.token_stack[i])
+                                        print("yes")
                                 else:
-                                        print("nom", end=' ')
-                                print()
-                                self.memory.ins_stack[len(self.memory.ins_stack)-1].append(self.token_stack[i])
+                                        no_error = False
+                                        print("nom")
+                                        break
 
                         i += 1
 
-                if new_ins:
-                        self.memory.ins_stack.append([])
+                #print(self.temp_ins)
+                print(self.memory.ins_stack)
 
-                print(self.memory.ins_stack)        
+                if no_error:
+                        self.memory.ins_stack.append(self.temp_ins)
 
-        def chk_error(self, index) -> bool:
+                #print(self.memory.ins_stack)        
 
-                ins_stk_ref = self.memory.ins_stack
-                ins_key = self.memory.ins_stack[-1][0]
+        def chk_error(self, index) -> bool:     #return True if no error, return False if there is
+
+                ins_key = self.temp_ins[0]
 
                 if ins_key in {1,2,3,6}:                        #type XXX R1 > R2
-                        if len(ins_stk_ref) == 4:
+                        if len(self.token_stack) == 4:
                                 if index in {1,3}:
-                                        if tkn_type(ins_stk_ref[index]) == 1:
+                                        if tkn_type(self.token_stack[index]) == 1:
                                                 return True
                                 elif index == 2:
-                                        if tkn_type(ins_stk_ref[index]) == 2:
+                                        if tkn_type(self.token_stack[index]) == 2:
                                                 return True
                         return False
 
                 elif ins_key in {7,8,9,14,15,16,17,18}:         #type XXX R1 & R2 > R3
                         
-                        if len(ins_stk_ref) == 6:
+                        if len(self.token_stack) == 6:
                                 if index in {1,3,5}:
-                                        if tkn_type(ins_stk_ref[index]) == 1:
+                                        if tkn_type(self.token_stack[index]) == 1:
                                                 return True
                                 elif index == 2:
-                                        if tkn_type(ins_stk_ref[index]) == 3:
+                                        if tkn_type(self.token_stack[index]) == 3:
                                                 return True
                                 elif index == 4:
-                                        if tkn_type(ins_stk_ref[index]) == 2:
+                                        if tkn_type(self.token_stack[index]) == 2:
                                                 return True
                         return False
 
                 elif ins_key in {10,11,12,13}:                  #type XXX R1 & %(n)
 
-                        if len(ins_stk_ref) == 4:
+                        if len(self.token_stack) == 4:
                                 if index == 1:
-                                        if tkn_type(ins_stk_ref[index]) == 1:
+                                        if tkn_type(self.token_stack[index]) == 1:
                                                 return True
                                 elif index == 2:
-                                        if tkn_type(ins_stk_ref[index]) == 3:
+                                        if tkn_type(self.token_stack[index]) == 3:
                                                 return True
                                 elif index == 3:
-                                        if tkn_type(ins_stk_ref[index]) == 4:
+                                        if tkn_type(self.token_stack[index]) == 4:
                                                 return True
                         return False
 
