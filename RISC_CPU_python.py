@@ -128,22 +128,20 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                 while i < len(self.token_stack):
                         if i == 0:
                                 if self.token_stack[i] in self.instructions.instructions.values():
-                                        
                                         self.temp_ins.append(find_key(self.instructions.instructions, self.token_stack[i]))
-                                        #self.memory.ins_stack[len(self.memory.ins_stack)-1].append(find_key(self.instructions.instructions, self.token_stack[i]))
-                                        print("Hallelujah!")
+                                        #print("Hallelujah!")
                                 else:
-                                        print("bepis")
+                                        no_error = False
+                                        #print("bepis")
                                         break
 
                         else:
-                                #self.memory.ins_stack[-1].append(self.token_stack[i])
                                 if self.chk_error(i):
                                         self.temp_ins.append(self.token_stack[i])
-                                        print("yes")
+                                        #print("yes")
                                 else:
                                         no_error = False
-                                        print("nom")
+                                        #print("nom")
                                         break
 
                         i += 1
@@ -196,16 +194,28 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                         return False
 
                 elif ins_key in {20,21,22,23,24,25,26,27,28}:   #type XXX @LABEL
+
+                        if len(self.token_stack) == 2:
+                                if index == 1:
+                                        if tkn_type(self.token_stack[index]) == 5:
+                                                return True
                         return False
                 
                 elif ins_key == 4:                              #type XXX R1/bit1
                         return False
 
-                elif ins_key == 5:                              #type XXX R1/bit2
+                elif ins_key == 5:                              #type XXX R1/bit,bit2
                         return False
 
                 elif ins_key == 19:                             #type XXX R1 & R2
-                        return False
+                        if len(self.token_stack) == 4:
+                                if index in {1,3}:
+                                        if tkn_type(self.token_stack[index]) == 1:
+                                                return True
+                                elif index == 2:
+                                        if tkn_type(self.token_stack[index]) == 3:
+                                                return True
+                        return False     
 
                 else:                                           #error
                         return False
