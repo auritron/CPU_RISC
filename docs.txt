@@ -59,3 +59,6 @@ After that, interpretation and error handling begins.
 - Check for next line and repeat
 - If there is an error encountered, discard the commands in that input and print exception. Reset input, and accept another one.
 - If fatal error, terminate program entirely.
+
+8. Other notes-
+- Registers are denoted using '0x' as the prefix, and a hex code value following it to represent the register number.

@@ -5,7 +5,8 @@ class System:
         def __init__(self) -> None:
                 self.memory = Memory()
                 self.instructions = Instructions()
-                self.interpreter = Interpreter(self.memory, self.instructions)
+                self.executing = False
+                self.interpreter = Interpreter(self.memory, self.instructions, self.executing)
                 self.cpu = CPU(self.interpreter)
                 
         def run(self):
@@ -20,7 +21,8 @@ class CPU:
 
         def run(self):
 
-                while True:
+                self.interpreter.executing = True
+                while self.interpreter.executing:
                         self.interpreter.tokenizer()
                         self.interpreter.error_handler()
                 
@@ -59,7 +61,8 @@ class Instructions:
                         26:"WZD",   #GO TO LABEL if f(DZ) = 1
                         27:"CAL",   #GO TO LABEL unconditionally, and set save point
                         28:"RET",   #RETURN to save point set by CAL in the subroutine
-                        29:"END"    #TERMINATE program
+                        29:"END",   #TERMINATE program
+                        30:"RUN"    #RUN program
 
                 }                  
 class ALU:
@@ -95,11 +98,12 @@ class Memory:
 
 class Interpreter:      #Interprets, tokenizes and error handles user input
 
-        def __init__(self, memory, instructions) -> None:
+        def __init__(self, memory, instructions, executing) -> None:
                 
                 self.ins_stack_count = 1
                 self.memory = memory
                 self.instructions = instructions
+                self.executing = executing
                 self.token_stack = []     #token stack
                 self.temp_ins = []
 
