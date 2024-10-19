@@ -134,6 +134,7 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                                 if self.token_stack[i] in self.instructions.instructions.values():
                                         self.temp_ins.append(find_key(self.instructions.instructions, self.token_stack[i]))
                                         #print("Hallelujah!")
+                                        #check
                                 else:
                                         no_error = False
                                         #print("bepis")
