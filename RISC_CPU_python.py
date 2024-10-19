@@ -21,10 +21,11 @@ class CPU:
 
         def run(self):
 
-                self.interpreter.executing = True
-                while self.interpreter.executing:
+                self.interpreter.executing = False
+                while not self.interpreter.executing:
                         self.interpreter.tokenizer()
                         self.interpreter.error_handler()
+                print("IT'S JOEVER!")
                 
 
 class Instructions:
@@ -131,10 +132,12 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                 no_error = True
                 while i < len(self.token_stack):
                         if i == 0:
-                                if self.token_stack[i] in self.instructions.instructions.values():
+                                if self.token_stack[i] == "RUN":
+                                        self.executing = True
+                                        break
+                                elif self.token_stack[i] in self.instructions.instructions.values():
                                         self.temp_ins.append(find_key(self.instructions.instructions, self.token_stack[i]))
                                         #print("Hallelujah!")
-                                        #check
                                 else:
                                         no_error = False
                                         #print("bepis")
