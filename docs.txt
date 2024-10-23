@@ -61,4 +61,6 @@ After that, interpretation and error handling begins.
 - If fatal error, terminate program entirely.
 
 8. Other notes-
-- Registers are denoted using '0x' as the prefix, and a hex code value following it to represent the register number.
+> Registers -
+- Registers are denoted using '0x' as the prefix, and a 4 digit hex code value following it to represent the register number (Eg. 0x003D represents location 61, which is register no. 5 of sub-location 7). 
+- Mem loc - > Register
