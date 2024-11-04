@@ -24,7 +24,7 @@ class CPU:
                 self.interpreter.executing = False
                 while not self.interpreter.executing:
                         self.interpreter.tokenizer()
-                        self.interpreter.error_handler()
+                        self.interpreter.errorHandler()
                 print("ITS JOEVER!")
                 
 
@@ -128,7 +128,7 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                 if tknstr:
                         self.token_stack.append(tknstr)
 
-        def error_handler(self):
+        def errorHandler(self):
 
                 i = 0
                 no_error = True
@@ -138,7 +138,7 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                                         self.executing = True
                                         break
                                 elif self.token_stack[i] in self.instructions.instructions.values():
-                                        self.temp_ins.append(find_key(self.instructions.instructions, self.token_stack[i]))
+                                        self.temp_ins.append(findKey(self.instructions.instructions, self.token_stack[i]))
                                         #print("Hallelujah!")
                                 else:
                                         no_error = False
@@ -146,7 +146,7 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                                         break
 
                         else:
-                                if self.chk_error(i):
+                                if self.chkError(i):
                                         self.temp_ins.append(self.token_stack[i])
                                         #print("yes")
                                 else:
@@ -161,17 +161,17 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
 
                 print(self.memory.ins_stack)        
 
-        def chk_error(self, index) -> bool:     #return True if no error, return False if there is
+        def chkError(self, index) -> bool:     #return True if no error, return False if there is
 
                 ins_key = self.temp_ins[0]
 
                 if ins_key in {1,2,3,6}:                        #type XXX R1 > R2
                         if len(self.token_stack) == 4:
                                 if index in {1,3}:
-                                        if tkn_type(self.token_stack[index]) == 1:
+                                        if tknType(self.token_stack[index]) == 1:
                                                 return True
                                 elif index == 2:
-                                        if tkn_type(self.token_stack[index]) == 2:
+                                        if tknType(self.token_stack[index]) == 2:
                                                 return True
                         return False
 
@@ -179,13 +179,13 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                         
                         if len(self.token_stack) == 6:
                                 if index in {1,3,5}:
-                                        if tkn_type(self.token_stack[index]) == 1:
+                                        if tknType(self.token_stack[index]) == 1:
                                                 return True
                                 elif index == 2:
-                                        if tkn_type(self.token_stack[index]) == 3:
+                                        if tknType(self.token_stack[index]) == 3:
                                                 return True
                                 elif index == 4:
-                                        if tkn_type(self.token_stack[index]) == 2:
+                                        if tknType(self.token_stack[index]) == 2:
                                                 return True
                         return False
 
@@ -193,13 +193,13 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
 
                         if len(self.token_stack) == 4:
                                 if index == 1:
-                                        if tkn_type(self.token_stack[index]) == 1:
+                                        if tknType(self.token_stack[index]) == 1:
                                                 return True
                                 elif index == 2:
-                                        if tkn_type(self.token_stack[index]) == 3:
+                                        if tknType(self.token_stack[index]) == 3:
                                                 return True
                                 elif index == 3:
-                                        if tkn_type(self.token_stack[index]) == 4:
+                                        if tknType(self.token_stack[index]) == 4:
                                                 return True
                         return False
 
@@ -207,7 +207,7 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
 
                         if len(self.token_stack) == 2:
                                 if index == 1:
-                                        if tkn_type(self.token_stack[index]) == 5:
+                                        if tknType(self.token_stack[index]) == 5:
                                                 return True
                         return False
                 
@@ -220,10 +220,10 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                 elif ins_key == 19:                             #type XXX R1 & R2
                         if len(self.token_stack) == 4:
                                 if index in {1,3}:
-                                        if tkn_type(self.token_stack[index]) == 1:
+                                        if tknType(self.token_stack[index]) == 1:
                                                 return True
                                 elif index == 2:
-                                        if tkn_type(self.token_stack[index]) == 3:
+                                        if tknType(self.token_stack[index]) == 3:
                                                 return True
                         return False     
 
@@ -233,14 +233,14 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                 
 
 #other methods               
-def find_key(dict, val) -> int: #find key value from dict
+def findKey(dict, val) -> int: #find key value from dict
 
         for key, value in dict.items():
                 if value == val:
                         return key
         return None
 
-def tkn_type(token) -> int: #assign value to token type - 1 for register, 2 for '>', 3 for '&', 4 for '%', 5 for '@', 0 for none
+def tknType(token) -> int: #assign value to token type - 1 for register, 2 for '>', 3 for '&', 4 for '%', 5 for '@', 0 for none
         if len(token) == 8 and token[0:2] == '0x':
                 return 1
         elif token == '>':
@@ -253,6 +253,16 @@ def tkn_type(token) -> int: #assign value to token type - 1 for register, 2 for 
                 return 5
         else:
                 return 0
+        
+#convert hex code address to int, subAddress represents if it refers to the inner or outer array in RAM
+def hexToAddress(memAddress: str, subAddress: bool) -> int:
+        address_val = ''
+        if memAddress[0:2] == '0x':
+                address_val = memAddress[2:]
+        else:
+                return None
+        
+
 
 system = System()
 system.run()
