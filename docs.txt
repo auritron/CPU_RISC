@@ -62,3 +62,4 @@ After that, interpretation and error handling begins.
 
 8. Other notes-
 - Registers are denoted using '0x' as the prefix, and a hex code value following it to represent the register number.
+- Add a program converts hexdec to decimal and decimal to hexdec for detecting register addresses

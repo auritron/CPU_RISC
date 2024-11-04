@@ -5,7 +5,7 @@ class System:
         def __init__(self) -> None:
                 self.memory = Memory()
                 self.instructions = Instructions()
-                self.executing = False
+                self.executing = True
                 self.interpreter = Interpreter(self.memory, self.instructions, self.executing)
                 self.cpu = CPU(self.interpreter)
                 
@@ -21,10 +21,11 @@ class CPU:
 
         def run(self):
 
-                self.interpreter.executing = True
-                while self.interpreter.executing:
+                self.interpreter.executing = False
+                while not self.interpreter.executing:
                         self.interpreter.tokenizer()
                         self.interpreter.error_handler()
+                print("ITS JOEVER!")
                 
 
 class Instructions:
@@ -61,11 +62,13 @@ class Instructions:
                         26:"WZD",   #GO TO LABEL if f(DZ) = 1
                         27:"CAL",   #GO TO LABEL unconditionally, and set save point
                         28:"RET",   #RETURN to save point set by CAL in the subroutine
-                        29:"END",   #TERMINATE program
-                        30:"RUN"    #RUN program
+                        29:"END"   #TERMINATE program
 
-                }                  
-class ALU:
+                }
+
+        #def load(self, loc_mem, loc_cache):
+                          
+class ALU: 
         pass
 
 class Memory:
@@ -131,7 +134,10 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                 no_error = True
                 while i < len(self.token_stack):
                         if i == 0:
-                                if self.token_stack[i] in self.instructions.instructions.values():
+                                if self.token_stack[i] == "RUN":
+                                        self.executing = True
+                                        break
+                                elif self.token_stack[i] in self.instructions.instructions.values():
                                         self.temp_ins.append(find_key(self.instructions.instructions, self.token_stack[i]))
                                         #print("Hallelujah!")
                                 else:
@@ -227,7 +233,7 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                 
 
 #other methods               
-def find_key(dict, val): #find key value from dict
+def find_key(dict, val) -> int: #find key value from dict
 
         for key, value in dict.items():
                 if value == val:
