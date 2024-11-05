@@ -241,7 +241,7 @@ def findKey(dict, val) -> int: #find key value from dict
         return None
 
 def tknType(token) -> int: #assign value to token type - 1 for register, 2 for '>', 3 for '&', 4 for '%', 5 for '@', 0 for none
-        if len(token) == 8 and token[0:2] == '0x':
+        if len(token) == 6 and token[0:2] == '0x':
                 return 1
         elif token == '>':
                 return 2
@@ -255,14 +255,11 @@ def tknType(token) -> int: #assign value to token type - 1 for register, 2 for '
                 return 0
         
 #convert hex code address to int, subAddress represents if it refers to the inner or outer array in RAM
-def hexToAddress(memAddress: str, subAddress: bool) -> int:
-        address_val = ''
-        if memAddress[0:2] == '0x':
-                address_val = memAddress[2:]
-        else:
+def hexToAddress(memAddress: str) -> list[int]:
+        try:
+                return [int(memAddress,16) % 8, int(memAddress,16) // 8]
+        except ValueError:
                 return None
-        
-
 
 system = System()
 system.run()
