@@ -66,10 +66,22 @@ class Instructions:
 
                 }
 
-        #def load(self, loc_mem, loc_cache):
+        #access RAM and move data
+        def load(self, loc_mem, loc_cache):
+                pass
+
+        def send(self, loc_mem, loc_cache):
+                pass
+
+        def copy(self, loc_1, loc_2):
+                pass
+
                           
 class ALU: 
-        pass
+        
+        #logic
+        def l_not(self, mem):
+                pass
 
 class Memory:
 
