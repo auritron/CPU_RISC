@@ -68,7 +68,8 @@ class Instructions:
 
         #access RAM and move data
         def load(self, loc_mem, loc_cache):
-                pass
+                with open('RAM.json') as ram:
+                        mem = json.load(ram)
 
         def send(self, loc_mem, loc_cache):
                 pass
