@@ -5,28 +5,35 @@ class System:
         def __init__(self) -> None:
                 self.memory = Memory()
                 self.instructions = Instructions()
+                self.alu = ALU()
                 self.executing = True
                 self.interpreter = Interpreter(self.memory, self.instructions, self.executing)
-                self.cpu = CPU(self.interpreter)
+                self.cpu = CPU(self.interpreter, self.instructions, self.alu, self.memory)
                 
         def run(self):
-                self.cpu.run()
-
+                self.cpu.interpret()
 
 class CPU:
 
-        def __init__(self, interpreter) -> None:
+        def __init__(self, interpreter, instructions, alu, memory) -> None:
                 
                 self.interpreter = interpreter
+                self.instructions = instructions
+                self.memory = memory
+                self.alu = alu
 
-        def run(self):
+        def interpret(self):
 
                 self.interpreter.executing = False
                 while not self.interpreter.executing:
                         self.interpreter.tokenizer()
                         self.interpreter.errorHandler()
                 print("ITS JOEVER!")
-                
+
+        def execute(self):
+                for ins in self.memory.ins_stack:
+                        if ins[0] == 1:
+                                self.instructions.load(hexToAddress(ins[1])[0]) #INCOMPLETE                     
 
 class Instructions:
 
@@ -68,10 +75,11 @@ class Instructions:
                 }
 
         #access RAM and move data
-        def load(self, loc_mem: int, loc_cache: int) -> None:
+        def load(self, loc_mem: str, loc_cache: int) -> None:   #load from RAM to cache
                 with open('RAM.json') as ram:
                         mem = json.load(ram)
-                print(mem["0"]["8"])
+                
+                #print(mem["0"]["8"])
 
         def send(self, loc_mem: int, loc_cache: int) -> None:
                 pass
@@ -81,9 +89,10 @@ class Instructions:
 
         def set(self, mem: int, val: int) -> None:
                 pass
+
                           
 class ALU: 
-        
+
         #logic
         def l_not(self, mem: int, loc: int) -> None:
                 pass
@@ -295,7 +304,7 @@ def tknType(token) -> int: #assign value to token type - 1 for register, 2 for '
 #convert hex code address to int, subAddress represents if it refers to the inner or outer array in RAM
 def hexToAddress(memAddress: str) -> list[int]:
         try:
-                return [int(memAddress,16) % 8, int(memAddress,16) // 8]
+                return [int(memAddress,16) // 8, int(memAddress,16) % 8]
         except ValueError:
                 return None
 
