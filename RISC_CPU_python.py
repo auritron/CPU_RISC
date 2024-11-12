@@ -38,7 +38,7 @@ class Instructions:
                         2:"SEND",   #SEND from Cache to RAM
                         3:"COPY",   #COPY the data from Register to another in the cache
                         4:"SET",    #SET VALUE of bit in a register to 0 or 1 
-                        5:"SETR",   #SET Multiple VALUES in a range of bits in a single register to 0 or 1
+                        5:"SETR",   #SET Multiple VALUES in a range of bits in a single register to 0 or 1 (NOT IMPLMENTING)
                         6:"NOT",    #BITWISE NOT
                         7:"AND",    #BITWISE AND
                         8:"OR",     #BITWISE OR
@@ -52,6 +52,7 @@ class Instructions:
                         16:"MUL",   #MULTIPLY the values of two Registers
                         17:"DIV",   #DIVIDE the values of two Registers and store quotient
                         18:"MOD",   #DIVIDE the values of two registers and store remainder
+                                #vvv NOT TO BE IMPLEMENTED FOR SCHOOL PROJECT vvv
                         19:"CMP",   #COMPARE two registers
                         20:"GOTO",  #GO TO LABEL unconditionally
                         21:"WEQ",   #GO TO LABEL if f(Z) = 1
@@ -67,21 +68,44 @@ class Instructions:
                 }
 
         #access RAM and move data
-        def load(self, loc_mem, loc_cache):
+        def load(self, loc_mem: int, loc_cache: int):
                 with open('RAM.json') as ram:
                         mem = json.load(ram)
 
-        def send(self, loc_mem, loc_cache):
+        def send(self, loc_mem: int, loc_cache: int):
                 pass
 
-        def copy(self, loc_1, loc_2):
+        def copy(self, locA: int , locB: int):
                 pass
 
+        def set(self, mem: int, val: int):
+                pass
                           
 class ALU: 
         
         #logic
-        def l_not(self, mem):
+        def l_not(self, mem: int, loc: int):
+                pass
+
+        def l_or(self, memA: int, memB: int, loc: int):
+                pass
+
+        def l_and(self, memA: int, memB: int, loc: int):
+                pass
+
+        def l_xor(self, memA: int, memB: int, loc: int):
+                pass
+
+        def a_add(self, memA: int, memB: int, loc: int):
+                pass
+
+        def a_sub(self, memA: int, memB: int, loc: int):
+                pass
+
+        def a_mul(self, memA: int, memB: int, loc: int):
+                pass
+
+        def a_div(self, memA: int, memB: int, loc: int, mod: bool):
                 pass
 
 class Memory:
