@@ -68,44 +68,45 @@ class Instructions:
                 }
 
         #access RAM and move data
-        def load(self, loc_mem: int, loc_cache: int):
+        def load(self, loc_mem: int, loc_cache: int) -> None:
                 with open('RAM.json') as ram:
                         mem = json.load(ram)
+                print(mem["0"]["8"])
 
-        def send(self, loc_mem: int, loc_cache: int):
+        def send(self, loc_mem: int, loc_cache: int) -> None:
                 pass
 
-        def copy(self, locA: int , locB: int):
+        def copy(self, locA: int , locB: int) -> None:
                 pass
 
-        def set(self, mem: int, val: int):
+        def set(self, mem: int, val: int) -> None:
                 pass
                           
 class ALU: 
         
         #logic
-        def l_not(self, mem: int, loc: int):
+        def l_not(self, mem: int, loc: int) -> None:
                 pass
 
-        def l_or(self, memA: int, memB: int, loc: int):
+        def l_or(self, memA: int, memB: int, loc: int) -> None:
                 pass
 
-        def l_and(self, memA: int, memB: int, loc: int):
+        def l_and(self, memA: int, memB: int, loc: int) -> None:
                 pass
 
-        def l_xor(self, memA: int, memB: int, loc: int):
+        def l_xor(self, memA: int, memB: int, loc: int) -> None:
                 pass
 
-        def a_add(self, memA: int, memB: int, loc: int):
+        def a_add(self, memA: int, memB: int, loc: int) -> None:
                 pass
 
-        def a_sub(self, memA: int, memB: int, loc: int):
+        def a_sub(self, memA: int, memB: int, loc: int) -> None:
                 pass
 
-        def a_mul(self, memA: int, memB: int, loc: int):
+        def a_mul(self, memA: int, memB: int, loc: int) -> None:
                 pass
 
-        def a_div(self, memA: int, memB: int, loc: int, mod: bool):
+        def a_div(self, memA: int, memB: int, loc: int, mod: bool) -> None:
                 pass
 
 class Memory:
