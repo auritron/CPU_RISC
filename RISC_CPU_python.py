@@ -39,7 +39,9 @@ class CPU:
         def execute(self):
                 for ins in self.memory.ins_stack:
                         if ins[0] == 1:
-                                self.instructions.load(ins[1],ins[3])                    
+                                self.instructions.load(ins[1],ins[3])
+                        elif ins[0] == 2:
+                                self.instructions.send(ins[1],ins[3])
 
 class Instructions:
 
@@ -88,14 +90,18 @@ class Instructions:
 
         #access RAM and move data
         def load(self, loc_mem: str, loc_cache: int) -> None:   #load from RAM to cache
-                with open('RAM.json') as ram:
+                with open('RAM.json', 'r') as ram:
                         mem = json.load(ram)
                 temp = mem[str(hexToAddress(loc_mem)[0])][str(hexToAddress(loc_mem)[1])]
                 self.memory.cache[hexToAddress(loc_cache)[1]] = temp
-                #print(mem["0"]["8"])
 
-        def send(self, loc_mem: int, loc_cache: int) -> None:
-                pass
+        def send(self, loc_mem: int, loc_cache: int) -> None:   #save to RAM from cache
+                with open('RAM.json', 'r') as ram:
+                        mem = json.load(ram)
+                temp = self.memory.cache[str(hexToAddress(loc_cache)[1])]
+                mem[str(hexToAddress(loc_mem)[0])][str(hexToAddress(loc_mem)[1])] = temp
+                with open('RAM.json' , 'w') as ram:
+                        json.dump(temp, ram, indent = 4)
 
         def copy(self, locA: int , locB: int) -> None:
                 pass
