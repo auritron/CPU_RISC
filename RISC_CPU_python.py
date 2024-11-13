@@ -11,8 +11,10 @@ class System:
                 self.cpu = CPU(self.interpreter, self.instructions, self.alu, self.memory)
                 
         def run(self):
-                self.cpu.interpret()
-                self.cpu.execute()
+                while True:
+                        self.cpu.interpret()
+                        self.cpu.execute()
+                        self.memory.ins_stack.clear()
 
 class CPU:
 
@@ -29,12 +31,15 @@ class CPU:
                 while not self.interpreter.executing:
                         self.interpreter.tokenizer()
                         self.interpreter.errorHandler()
+                        if len(self.memory.ins_stack) != 0 and self.memory.ins_stack[-1] == []:
+                                self.memory.ins_stack.pop()
+                        print(self.memory.ins_stack)
                 print("ITS JOEVER!")
 
         def execute(self):
                 for ins in self.memory.ins_stack:
                         if ins[0] == 1:
-                                self.instructions.load(ins[1],ins[3]) #INCOMPLETE                    
+                                self.instructions.load(ins[1],ins[3])                    
 
 class Instructions:
 
@@ -73,8 +78,11 @@ class Instructions:
                         26:"WZD",   #GO TO LABEL if f(DZ) = 1
                         27:"CAL",   #GO TO LABEL unconditionally, and set save point
                         28:"RET",   #RETURN to save point set by CAL in the subroutine
+                                #^^^ NOT TO BE IMPLEMENTED FOR SCHOOL PROJECT ^^^
                         29:"END",   #TERMINATE program
-                        30:"DISP"   #Display Cache Values
+                        30:"DISP",  #Display Cache Values
+                        31:"CLRC",  #Clear the Cache(Set all values to 0)
+                        32:"CLRR",  #Clear the RAM(Set all values to 0)
 
                 }
 
@@ -82,8 +90,8 @@ class Instructions:
         def load(self, loc_mem: str, loc_cache: int) -> None:   #load from RAM to cache
                 with open('RAM.json') as ram:
                         mem = json.load(ram)
-                temp = mem[hexToAddress(loc_mem)[0]][hexToAddress(loc_mem)[1]]
-                self.memory.cache[hexToAddress(loc_cache)[0]] = temp
+                temp = mem[str(hexToAddress(loc_mem)[0])][str(hexToAddress(loc_mem)[1])]
+                self.memory.cache[hexToAddress(loc_cache)[1]] = temp
                 #print(mem["0"]["8"])
 
         def send(self, loc_mem: int, loc_cache: int) -> None:
@@ -128,6 +136,7 @@ class Memory:
         def __init__(self) -> None:
 
                 self.cache = {
+                        0:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                         1:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                         2:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                         3:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -135,7 +144,6 @@ class Memory:
                         5:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                         6:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                         7:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                        8:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                 }
 
                 self.temp_array = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -215,7 +223,7 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                 if no_error:
                         self.memory.ins_stack.append(self.temp_ins[:])  #append copy of temp_ins to ins_stack
 
-                print(self.memory.ins_stack)        
+                #print(self.memory.ins_stack)
 
         def chkError(self, index) -> bool:     #return True if no error, return False if there is
 
