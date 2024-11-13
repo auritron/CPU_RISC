@@ -5,7 +5,7 @@ class System:
         def __init__(self) -> None:
                 self.memory = Memory()
                 self.instructions = Instructions(self.memory)
-                self.alu = ALU()
+                self.alu = ALU(self.memory)
                 self.executing = True
                 self.interpreter = Interpreter(self.memory, self.instructions, self.executing)
                 self.cpu = CPU(self.interpreter, self.instructions, self.alu, self.memory)
@@ -42,6 +42,18 @@ class CPU:
                                 self.instructions.load(ins[1],ins[3])
                         elif ins[0] == 2:
                                 self.instructions.send(ins[3],ins[1])
+                        elif ins[0] == 3:
+                                self.instructions.copy(ins[1],ins[3])
+                        elif ins[0] == 4:
+                                self.instructions.set(ins[1],ins[3],ins[5])
+                        elif ins[0] == 6:
+                                self.alu.l_not(ins[1],ins[3])
+                        elif ins[0] == 7:
+                                self.alu.l_and(ins[1],ins[3],ins[5])
+                        elif ins[0] == 8:
+                                self.alu.l_or(ins[1],ins[3],ins[5])
+                        elif ins[0] == 9:
+                                self.alu.l_xor(ins[1],ins[3],ins[5])
 
 class Instructions:
 
@@ -60,10 +72,10 @@ class Instructions:
                         7:"AND",    #BITWISE AND
                         8:"OR",     #BITWISE OR
                         9:"XOR",    #BITWISE XOR
-                        10:"STL",   #SHIFT bits LEFT
-                        11:"STR",   #SHIFT bits RIGHT
-                        12:"RTL",   #ROTATE bits LEFT
-                        13:"RTR",   #ROTATE bits RIGHT
+                        10:"STL",   #SHIFT bits LEFT (NOT IMPLMENTING FOR SCHOOL)
+                        11:"STR",   #SHIFT bits RIGHT (NOT IMPLMENTING FOR SCHOOL)
+                        12:"RTL",   #ROTATE bits LEFT (NOT IMPLMENTING FOR SCHOOL)
+                        13:"RTR",   #ROTATE bits RIGHT (NOT IMPLMENTING FOR SCHOOL)
                         14:"ADD",   #ADD the values of two Registers
                         15:"SUB",   #SUBTRACT the values of two Registers
                         16:"MUL",   #MULTIPLY the values of two Registers
@@ -108,8 +120,8 @@ class Instructions:
                 self.memory.cache[hexToAddress(locB)[1]] = temp
 
         def set(self, mem: int, pos:int, val: int) -> None:
-                if pos > 15 or pos < 0:
-                        if val in (0,1):
+                if pos < 15 or pos > 0:
+                        if val in {0,1}:
                                 self.memory.cache[hexToAddress(mem)[1]][pos] = val
                         else:
                                 return None
@@ -117,18 +129,58 @@ class Instructions:
                           
 class ALU: 
 
+        def __init__(self, memory) -> None:
+
+                self.memory = memory
+
         #logic
         def l_not(self, mem: int, loc: int) -> None:
-                pass
+                i = 0
+                while i < len(self.memory.cache[hexToAddress(mem)[1]]):
+                        if self.memory.cache[hexToAddress(mem)[1]][i] == 0:
+                                self.memory.cache[hexToAddress(loc)[1]][i] = 1
+                        else:
+                                self.memory.cache[hexToAddress(loc)[1]][i] = 0
+                        i += 1
 
         def l_or(self, memA: int, memB: int, loc: int) -> None:
-                pass
+                i = 0
+                while i < len(self.memory.cache[hexToAddress(memA)[1]]):
+                        if self.memory.cache[hexToAddress(memA)[1]][i] == 0:
+                                if self.memory.cache[hexToAddress(memB)[1]][i] == 0:
+                                        self.memory.cache[hexToAddress(loc)[1]][i] = 0
+                                else:
+                                        self.memory.cache[hexToAddress(loc)[1]][i] = 1
+                        else:
+                                self.memory.cache[hexToAddress(loc)[1]][i] = 1
+                        i += 1                                         
 
         def l_and(self, memA: int, memB: int, loc: int) -> None:
-                pass
+                i = 0
+                while i < len(self.memory.cache[hexToAddress(memA)[1]]):
+                        if self.memory.cache[hexToAddress(memA)[1]][i] == 0:
+                                self.memory.cache[hexToAddress(loc)[1]][i] = 0
+                        else:
+                                if self.memory.cache[hexToAddress(memB)[1]][i] == 0:
+                                        self.memory.cache[hexToAddress(loc)[1]][i] = 0
+                                else:
+                                        self.memory.cache[hexToAddress(loc)[1]][i] = 1
+                        i += 1
 
         def l_xor(self, memA: int, memB: int, loc: int) -> None:
-                pass
+                i = 0
+                while i < len(self.memory.cache[hexToAddress(memA)[1]]):
+                        if self.memory.cache[hexToAddress(memA)[1]][i] == 0:
+                                if self.memory.cache[hexToAddress(memB)[1]][i] == 0:
+                                        self.memory.cache[hexToAddress(loc)[1]][i] = 0
+                                else:
+                                        self.memory.cache[hexToAddress(loc)[1]][i] = 1
+                        else:
+                                if self.memory.cache[hexToAddress(memB)[1]][i] == 0:
+                                        self.memory.cache[hexToAddress(loc)[1]][i] = 1
+                                else:
+                                        self.memory.cache[hexToAddress(loc)[1]][i] = 0
+                        i += 1
 
         def a_add(self, memA: int, memB: int, loc: int) -> None:
                 pass
@@ -259,7 +311,7 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                                                 return True
                         return False
 
-                elif ins_key in {7,8,9,14,15,16,17,18}:         #type XXX R1 & R2 > R3
+                elif ins_key in {4,7,8,9,14,15,16,17,18}:         #type XXX R1 & R2 > R3
                         
                         if len(self.token_stack) == 6:
                                 if index in {1,3,5}:
@@ -295,8 +347,8 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                                                 return True
                         return False
                 
-                elif ins_key == 4:                              #type XXX R1/bit1
-                        return False
+                #elif ins_key == 4:                              #type XXX R1/bit1 = val
+                        #return False
 
                 elif ins_key == 5:                              #type XXX R1/bit,bit2
                         return False

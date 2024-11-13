@@ -19,7 +19,7 @@ Instructions -
 > Copy temp array into memory address 2
 > Reset temp array
 
-4. SET - (SET R1/bit1 = (0 or 1) ; Set 'bit1' in R1 as 0 or 1)
+4. SET - (SET R1/bit1 = (0 or 1) ; Set 'bit1' in R1 as 0 or 1) FOR SCHOOL (SET R1 & bit1 > (0 or 1))
 > Locate memory address 1
 > Locate bit in memory address 1
 > Set bit to 0 or 1 as specified by user(from function)
