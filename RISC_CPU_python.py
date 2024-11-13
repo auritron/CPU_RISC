@@ -41,7 +41,7 @@ class CPU:
                         if ins[0] == 1:
                                 self.instructions.load(ins[1],ins[3])
                         elif ins[0] == 2:
-                                self.instructions.send(ins[1],ins[3])
+                                self.instructions.send(ins[3],ins[1])
 
 class Instructions:
 
@@ -98,17 +98,22 @@ class Instructions:
         def send(self, loc_mem: int, loc_cache: int) -> None:   #save to RAM from cache
                 with open('RAM.json', 'r') as ram:
                         mem = json.load(ram)
-                temp = self.memory.cache[str(hexToAddress(loc_cache)[1])]
+                temp = self.memory.cache[hexToAddress(loc_cache)[1]]
                 mem[str(hexToAddress(loc_mem)[0])][str(hexToAddress(loc_mem)[1])] = temp
                 with open('RAM.json' , 'w') as ram:
-                        json.dump(temp, ram, indent = 4)
+                        json.dump(mem, ram, indent = 4)
 
         def copy(self, locA: int , locB: int) -> None:
-                pass
+                temp = self.memory.cache[hexToAddress(locA)[1]]
+                self.memory.cache[hexToAddress(locB)[1]] = temp
 
-        def set(self, mem: int, val: int) -> None:
-                pass
-
+        def set(self, mem: int, pos:int, val: int) -> None:
+                if pos > 15 or pos < 0:
+                        if val in (0,1):
+                                self.memory.cache[hexToAddress(mem)[1]][pos] = val
+                        else:
+                                return None
+                return None
                           
 class ALU: 
 
@@ -200,13 +205,22 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                 no_error = True
                 while i < len(self.token_stack):
                         if i == 0:
-                                if self.token_stack[i] == "RUN":     #check for running
+                                if self.token_stack[i] == "RUN":        #check for running
                                         self.executing = True
                                         break
+
                                 elif self.token_stack[i] == "DISP":     #check to display values
                                         for key, val in self.memory.cache.items():
                                                 print(f"{key}: {val}")
                                         break
+
+                                elif self.token_stack[i] == "CLRR":     #reset RAM values to 0
+                                        with open('Backup_RAM.json', 'r') as backup_ram:
+                                                backup_data = json.load(backup_ram)
+                                        with open('RAM.json', 'w') as ram:
+                                                json.dump(backup_data, ram, indent=4)
+                                                break
+
                                 elif self.token_stack[i] in self.instructions.instructions.values():
                                         self.temp_ins.append(findKey(self.instructions.instructions, self.token_stack[i]))
                                         #print("Hallelujah!")
@@ -327,7 +341,8 @@ def tknType(token) -> int: #assign value to token type - 1 for register, 2 for '
 #convert hex code address to int, subAddress represents if it refers to the inner or outer array in RAM
 def hexToAddress(memAddress: str) -> list[int]:
         try:
-                return [int(memAddress,16) // 8, int(memAddress,16) % 8]
+                #return [int(memAddress,16) // 8, int(memAddress,16) % 8]
+                return [int(memAddress,16) // 16, int(memAddress,16) % 16]
         except ValueError:
                 return None
 
