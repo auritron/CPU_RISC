@@ -4,7 +4,7 @@ class System:
 
         def __init__(self) -> None:
                 self.memory = Memory()
-                self.instructions = Instructions()
+                self.instructions = Instructions(self.memory)
                 self.alu = ALU()
                 self.executing = True
                 self.interpreter = Interpreter(self.memory, self.instructions, self.executing)
@@ -12,6 +12,7 @@ class System:
                 
         def run(self):
                 self.cpu.interpret()
+                self.cpu.execute()
 
 class CPU:
 
@@ -33,17 +34,19 @@ class CPU:
         def execute(self):
                 for ins in self.memory.ins_stack:
                         if ins[0] == 1:
-                                self.instructions.load(hexToAddress(ins[1])[0]) #INCOMPLETE                     
+                                self.instructions.load(ins[1],ins[3]) #INCOMPLETE                    
 
 class Instructions:
 
-        def __init__(self) -> None:
+        def __init__(self, memory) -> None:
+
+                self.memory = memory
 
                 #instructions list
                 self.instructions = {
                         1:"LOAD",   #LOAD from RAM to Cache
                         2:"SEND",   #SEND from Cache to RAM
-                        3:"COPY",   #COPY the data from Register to another in the cache
+                        3:"COPY",   #COPY the data from Register to another in the Cache
                         4:"SET",    #SET VALUE of bit in a register to 0 or 1 
                         5:"SETR",   #SET Multiple VALUES in a range of bits in a single register to 0 or 1 (NOT IMPLMENTING)
                         6:"NOT",    #BITWISE NOT
@@ -57,8 +60,8 @@ class Instructions:
                         14:"ADD",   #ADD the values of two Registers
                         15:"SUB",   #SUBTRACT the values of two Registers
                         16:"MUL",   #MULTIPLY the values of two Registers
-                        17:"DIV",   #DIVIDE the values of two Registers and store quotient
-                        18:"MOD",   #DIVIDE the values of two registers and store remainder
+                        17:"DIV",   #DIVIDE the values of two Registers and store quotient (NOT IMPLMENTING FOR SCHOOL)
+                        18:"MOD",   #DIVIDE the values of two registers and store remainder (NOT IMPLMENTING FOR SCHOOL)
                                 #vvv NOT TO BE IMPLEMENTED FOR SCHOOL PROJECT vvv
                         19:"CMP",   #COMPARE two registers
                         20:"GOTO",  #GO TO LABEL unconditionally
@@ -70,7 +73,8 @@ class Instructions:
                         26:"WZD",   #GO TO LABEL if f(DZ) = 1
                         27:"CAL",   #GO TO LABEL unconditionally, and set save point
                         28:"RET",   #RETURN to save point set by CAL in the subroutine
-                        29:"END"   #TERMINATE program
+                        29:"END",   #TERMINATE program
+                        30:"DISP"   #Display Cache Values
 
                 }
 
@@ -78,7 +82,8 @@ class Instructions:
         def load(self, loc_mem: str, loc_cache: int) -> None:   #load from RAM to cache
                 with open('RAM.json') as ram:
                         mem = json.load(ram)
-                
+                temp = mem[hexToAddress(loc_mem)[0]][hexToAddress(loc_mem)[1]]
+                self.memory.cache[hexToAddress(loc_cache)[0]] = temp
                 #print(mem["0"]["8"])
 
         def send(self, loc_mem: int, loc_cache: int) -> None:
@@ -181,15 +186,19 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                 no_error = True
                 while i < len(self.token_stack):
                         if i == 0:
-                                if self.token_stack[i] == "RUN":
+                                if self.token_stack[i] == "RUN":     #check for running
                                         self.executing = True
+                                        break
+                                elif self.token_stack[i] == "DISP":     #check to display values
+                                        for key, val in self.memory.cache.items():
+                                                print(f"{key}: {val}")
                                         break
                                 elif self.token_stack[i] in self.instructions.instructions.values():
                                         self.temp_ins.append(findKey(self.instructions.instructions, self.token_stack[i]))
                                         #print("Hallelujah!")
                                 else:
                                         no_error = False
-                                        #print("bepis")
+                                        #print("GET OUT")
                                         break
 
                         else:
