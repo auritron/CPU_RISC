@@ -1,4 +1,5 @@
 import json
+import pandas
 
 class System:
 
@@ -34,7 +35,7 @@ class CPU:
                         if len(self.memory.ins_stack) != 0 and self.memory.ins_stack[-1] == []:
                                 self.memory.ins_stack.pop()
                         print(self.memory.ins_stack)
-                print("ITS JOEVER!")
+                print("OVER!")
 
         def execute(self):
                 for ins in self.memory.ins_stack:
@@ -54,6 +55,8 @@ class CPU:
                                 self.alu.l_or(ins[1],ins[3],ins[5])
                         elif ins[0] == 9:
                                 self.alu.l_xor(ins[1],ins[3],ins[5])
+                        elif ins[0] == 33:
+                                self.instructions.to_int(ins[1],ins[3])
 
 class Instructions:
 
@@ -97,6 +100,7 @@ class Instructions:
                         30:"DISP",  #Display Cache Values
                         31:"CLRC",  #Clear the Cache(Set all values to 0)
                         32:"CLRR",  #Clear the RAM(Set all values to 0)
+                        33:"TOINT"    #Convert register to integer    
 
                 }
 
@@ -126,6 +130,10 @@ class Instructions:
                         else:
                                 return None
                 return None
+        
+        def to_int(self, mem: int, pos: int) -> None:
+                binary_str = ''.join(str(bit) for bit in self.memory.cache[hexToAddress(mem)[1]])
+                print(int(binary_str, 2))
                           
 class ALU: 
 
@@ -207,6 +215,14 @@ class Memory:
                         5:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                         6:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                         7:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        8:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        9:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        10:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        11:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        12:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        13:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        14:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                        15:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                 }
 
                 self.temp_array = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -271,7 +287,7 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                                                 backup_data = json.load(backup_ram)
                                         with open('RAM.json', 'w') as ram:
                                                 json.dump(backup_data, ram, indent=4)
-                                                break
+                                        break
 
                                 elif self.token_stack[i] in self.instructions.instructions.values():
                                         self.temp_ins.append(findKey(self.instructions.instructions, self.token_stack[i]))
