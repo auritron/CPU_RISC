@@ -1,5 +1,5 @@
 import json
-import pandas
+import pandas as pd
 
 class System:
 
@@ -8,12 +8,15 @@ class System:
                 self.instructions = Instructions(self.memory)
                 self.alu = ALU(self.memory)
                 self.executing = True
+                self.running = True
                 self.interpreter = Interpreter(self.memory, self.instructions, self.executing)
                 self.cpu = CPU(self.interpreter, self.instructions, self.alu, self.memory)
                 
         def run(self):
-                while True:
+                while self.running:
                         self.cpu.interpret()
+                        if not self.running:
+                                break
                         self.cpu.execute()
                         self.memory.ins_stack.clear()
 
@@ -277,6 +280,10 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                                         self.executing = True
                                         break
 
+                                elif self.token_stack[i] == "END":
+                                        self.running = False
+                                        break
+
                                 elif self.token_stack[i] == "DISP":     #check to display values
                                         for key, val in self.memory.cache.items():
                                                 print(f"{key}: {val}")
@@ -307,6 +314,9 @@ class Interpreter:      #Interprets, tokenizes and error handles user input
                                         break
 
                         i += 1
+
+                if len(self.temp_ins) < 2:
+                        self.temp_ins.clear()
 
                 if no_error:
                         self.memory.ins_stack.append(self.temp_ins[:])  #append copy of temp_ins to ins_stack
